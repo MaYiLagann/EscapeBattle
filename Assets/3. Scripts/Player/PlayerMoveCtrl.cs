@@ -3,50 +3,58 @@ using System.Collections;
 
 public class PlayerMoveCtrl : MonoBehaviour {
 
-	public KeyCode ForwardKey = KeyCode.W;
-	public KeyCode BackKey = KeyCode.S;
-	public KeyCode LeftKey = KeyCode.A;
-	public KeyCode RightKey = KeyCode.D;
+	public float MoveSpeed = 5f;
+	public float JumpSpeed = 10f;
 
-	public float Speed = 10f;
-	public Transform Head;
+	[Header("Keyboard Settings")]
+	public KeyCode MoveForward = KeyCode.W;
+	public KeyCode MoveBack = KeyCode.S;
+	public KeyCode MoveLeft = KeyCode.A;
+	public KeyCode MoveRight = KeyCode.D;
+	public KeyCode JumpUp = KeyCode.Space;
+	public KeyCode WalkForward = KeyCode.LeftShift;
 
-	private Rigidbody Rigid;
+	private float walkSpeed = 0;
+	private float upSpeed = 0;
+	private bool isGround = true;
 
-	// Use this for initialization
 	void Start () {
-		Rigid = gameObject.GetComponent<Rigidbody> ();
-	}
 	
-	// Update is called once per frame
+	}
+
 	void Update () {
 		Move ();
 	}
 
+	void OnTriggerEnter(Collider col){
+		isGround = true;
+	}
+
+	/* Events */
+
 	void Move () {
-		if (Head == null) {
-			Debug.Log ("Head can't be null");
-			return;
-		}
-		Vector3 rot = Head.rotation.eulerAngles - gameObject.transform.rotation.eulerAngles;
-		rot.x = 0;
-		gameObject.transform.rotation = Quaternion.Euler (rot);
 
-		float spd = Speed * Time.deltaTime;
-		Vector3 move = Vector3.zero;
-		if (Input.GetKey (ForwardKey)) {
-			move.z++;
-		}
-		if (Input.GetKey (BackKey)) {
-			move.z--;
-		}
-		if (Input.GetKey (LeftKey)) {
-			move.x--;
-		}
-		if (Input.GetKey (RightKey)) {
-			move.x++;
+		walkSpeed = Input.GetKey (WalkForward) ? MoveSpeed / 3 : MoveSpeed;
+
+		CharacterController thisChara = gameObject.GetComponent<CharacterController> ();
+		if(Input.GetKey(MoveForward))
+			thisChara.Move (gameObject.transform.forward * walkSpeed * Time.deltaTime);
+		if(Input.GetKey(MoveBack))
+			thisChara.Move (-gameObject.transform.forward * walkSpeed * Time.deltaTime);
+		if(Input.GetKey(MoveLeft))
+			thisChara.Move (-gameObject.transform.right * walkSpeed * Time.deltaTime);
+		if(Input.GetKey(MoveRight))
+			thisChara.Move (gameObject.transform.right * walkSpeed * Time.deltaTime);
+		if (Input.GetKey (JumpUp) && isGround) {
+			upSpeed = JumpSpeed;
+			isGround = false;
 		}
 
-		Rigid.MovePosition (gameObject.transform.position + gameObject.transform.forward * move.z * spd);
+		if (upSpeed > 0)
+			upSpeed += Time.deltaTime * Physics.gravity.y;
+		else
+			upSpeed = 0;
+
+		thisChara.Move (gameObject.transform.up * (Physics.gravity.y + upSpeed) * Time.deltaTime);
 	}
 }

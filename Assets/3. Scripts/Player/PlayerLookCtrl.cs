@@ -2,7 +2,9 @@
 using System.Collections;
 
 public class PlayerLookCtrl : MonoBehaviour {
-	
+
+	public Transform Body;
+
 	public float SensitivityX = 10f;
 	public float SensitivityY = 10f;
 	public float MinimumX = -360f;
@@ -11,13 +13,23 @@ public class PlayerLookCtrl : MonoBehaviour {
 	public float MaximumY = 80f;
 
 	public KeyCode MousePointKey = KeyCode.LeftAlt;
+	public KeyCode LookForward = KeyCode.C;
 
-	private float rotationY = 0F;
+	private bool isLookforward = true;
+	private float rotationY = 0f;
+	private bool mouseVisible = true;
+
+	void Start () {
+		MousePoint ();
+	}
 
 	void Update () {
-		if (!Input.GetKey (MousePointKey))
+		if (!mouseVisible)
 			Rotate ();
-		MousePoint (Input.GetKey(MousePointKey));
+		if(Input.GetKeyDown(MousePointKey))
+			MousePoint ();
+		if (Input.GetKeyDown (LookForward))
+			isLookforward = !isLookforward;
 	}
 
 	void Rotate () {
@@ -26,12 +38,18 @@ public class PlayerLookCtrl : MonoBehaviour {
 		rotationY += Input.GetAxis("Mouse Y") * SensitivityY;
 		rotationY = Mathf.Clamp (rotationY, MinimumY, MaximumY);
 
-		gameObject.transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+		if (isLookforward) {
+			gameObject.transform.localEulerAngles = new Vector3 (-rotationY, 0, 0);
+			Body.Rotate (0, rotationX, 0);
+		} else {
+			gameObject.transform.localEulerAngles = new Vector3 (-rotationY, rotationX, 0);
+		}
 	}
 
-	void MousePoint(bool isVisible){
-		Cursor.lockState = isVisible ? CursorLockMode.None : CursorLockMode.Locked;
-		Cursor.visible = isVisible;
+	void MousePoint(){
+		mouseVisible = !mouseVisible;
+		Cursor.lockState = !mouseVisible ? CursorLockMode.Locked : CursorLockMode.None;
+		Cursor.visible = mouseVisible;
 	}
 
 }
