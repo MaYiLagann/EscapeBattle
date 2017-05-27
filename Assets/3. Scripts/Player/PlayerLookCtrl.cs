@@ -12,7 +12,7 @@ public class PlayerLookCtrl : MonoBehaviour {
 	public float MinimumY = -80f;
 	public float MaximumY = 80f;
 
-	public KeyCode MousePointKey = KeyCode.LeftAlt;
+	public KeyCode MousePointKey = KeyCode.BackQuote;
 	public KeyCode LookForward = KeyCode.C;
 
 	private bool isLookforward = true;
@@ -28,14 +28,16 @@ public class PlayerLookCtrl : MonoBehaviour {
 			Rotate ();
 		if(Input.GetKeyDown(MousePointKey))
 			MousePoint ();
-		if (Input.GetKeyDown (LookForward))
-			isLookforward = !isLookforward;
+		isLookforward = !Input.GetKey (LookForward);
+		if (Input.GetKeyUp (LookForward)) {
+			gameObject.transform.localEulerAngles = new Vector3 (-rotationY, Body.rotation.y, 0);
+		}
 	}
 
 	void Rotate () {
-		float rotationX = gameObject.transform.localEulerAngles.y + Input.GetAxis("Mouse X") * SensitivityX;
+		float rotationX = gameObject.transform.localEulerAngles.y + Input.GetAxis("Mouse X") * SensitivityX / 5f;
 
-		rotationY += Input.GetAxis("Mouse Y") * SensitivityY;
+		rotationY += Input.GetAxis("Mouse Y") * SensitivityY / 5f;
 		rotationY = Mathf.Clamp (rotationY, MinimumY, MaximumY);
 
 		if (isLookforward) {

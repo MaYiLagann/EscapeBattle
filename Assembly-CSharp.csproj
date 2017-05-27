@@ -48,6 +48,9 @@
      <Compile Include="Assets\3. Scripts\Player\PlayerCamCtrl.cs" />
      <Compile Include="Assets\3. Scripts\Player\PlayerLookCtrl.cs" />
      <Compile Include="Assets\3. Scripts\Player\PlayerMoveCtrl.cs" />
+     <Compile Include="Assets\3. Scripts\Player\PlayerWeaponCtrl.cs" />
+     <Compile Include="Assets\3. Scripts\Weapon\BulletCtrl.cs" />
+     <Compile Include="Assets\3. Scripts\Weapon\WeaponInfo.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

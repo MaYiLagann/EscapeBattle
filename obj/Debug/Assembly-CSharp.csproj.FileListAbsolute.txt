@@ -19,3 +19,24 @@ F:\제작\Unity_data\Working on Progress\EscapeBattle\Temp\bin\Debug\UnityEngine
 F:\제작\Unity_data\Working on Progress\EscapeBattle\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 F:\제작\Unity_data\Working on Progress\EscapeBattle\obj\Debug\Assembly-CSharp.dll
 F:\제작\Unity_data\Working on Progress\EscapeBattle\obj\Debug\Assembly-CSharp.pdb
+F:\Github\EscapeBattle\EscapeBattle\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
+F:\Github\EscapeBattle\EscapeBattle\obj\Debug\Assembly-CSharp.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Assembly-CSharp.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Assembly-CSharp.pdb
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\UnityEditor.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\UnityEngine.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\UnityEngine.Networking.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\UnityEngine.UI.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Mono.Cecil.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Unity.SerializationLogic.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Unity.DataContract.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Unity.UNetWeaver.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Unity.CecilTools.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Mono.Cecil.Pdb.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\Mono.Cecil.Mdb.dll
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\UnityEngine.xml
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\UnityEditor.xml
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\UnityEngine.UI.xml
+F:\Github\EscapeBattle\EscapeBattle\Temp\bin\Debug\UnityEngine.Networking.xml
+F:\Github\EscapeBattle\EscapeBattle\obj\Debug\Assembly-CSharp.pdb

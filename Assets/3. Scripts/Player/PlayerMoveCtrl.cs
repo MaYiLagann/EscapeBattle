@@ -12,7 +12,8 @@ public class PlayerMoveCtrl : MonoBehaviour {
 	public KeyCode MoveLeft = KeyCode.A;
 	public KeyCode MoveRight = KeyCode.D;
 	public KeyCode JumpUp = KeyCode.Space;
-	public KeyCode WalkForward = KeyCode.LeftShift;
+	public KeyCode RunForward = KeyCode.LeftShift;
+	public KeyCode WalkForward = KeyCode.LeftAlt;
 
 	private float walkSpeed = 0;
 	private float upSpeed = 0;
@@ -34,10 +35,12 @@ public class PlayerMoveCtrl : MonoBehaviour {
 
 	void Move () {
 
-		walkSpeed = Input.GetKey (WalkForward) ? MoveSpeed / 3 : MoveSpeed;
+		walkSpeed = Input.GetKey (WalkForward) ? MoveSpeed / 3f : MoveSpeed;
 
 		CharacterController thisChara = gameObject.GetComponent<CharacterController> ();
-		if(Input.GetKey(MoveForward))
+		if (Input.GetKey (MoveForward)&& Input.GetKey(RunForward)) 
+			thisChara.Move (gameObject.transform.forward * walkSpeed * Time.deltaTime * 1.5f);
+		else if (Input.GetKey (MoveForward))
 			thisChara.Move (gameObject.transform.forward * walkSpeed * Time.deltaTime);
 		if(Input.GetKey(MoveBack))
 			thisChara.Move (-gameObject.transform.forward * walkSpeed * Time.deltaTime);
@@ -51,7 +54,7 @@ public class PlayerMoveCtrl : MonoBehaviour {
 		}
 
 		if (upSpeed > 0)
-			upSpeed += Time.deltaTime * Physics.gravity.y;
+			upSpeed += Time.deltaTime * Physics.gravity.y * 2;
 		else
 			upSpeed = 0;
 

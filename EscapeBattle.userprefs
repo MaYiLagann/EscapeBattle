@@ -1,9 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\3. Scripts\Player\PlayerMoveCtrl.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\3. Scripts\Player\PlayerLookCtrl.cs">
     <Files>
       <File FileName="Assets\3. Scripts\Player\PlayerLookCtrl.cs" Line="45" Column="34" />
-      <File FileName="Assets\3. Scripts\Player\PlayerMoveCtrl.cs" Line="13" Column="39" />
+      <File FileName="Assets\3. Scripts\Player\PlayerMoveCtrl.cs" Line="54" Column="53" />
       <File FileName="Assets\3. Scripts\Player\PlayerCamCtrl.cs" Line="14" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
