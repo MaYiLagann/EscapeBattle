@@ -18,9 +18,11 @@ public class PlayerMoveCtrl : MonoBehaviour {
 	private float walkSpeed = 0;
 	private float upSpeed = 0;
 	private bool isGround = true;
+	private CharacterController thisChara;
+	private Vector3 move;
 
 	void Start () {
-	
+		thisChara = gameObject.GetComponent<CharacterController> ();
 	}
 
 	void Update () {
@@ -34,23 +36,24 @@ public class PlayerMoveCtrl : MonoBehaviour {
 	/* Events */
 
 	void Move () {
+		if (isGround) {
+			move = Vector3.zero;
+			walkSpeed = Input.GetKey (WalkForward) ? MoveSpeed / 3f : MoveSpeed;
+			walkSpeed = Input.GetKey (RunForward) ? walkSpeed * 1.5f : walkSpeed;
 
-		walkSpeed = Input.GetKey (WalkForward) ? MoveSpeed / 3f : MoveSpeed;
-
-		CharacterController thisChara = gameObject.GetComponent<CharacterController> ();
-		if (Input.GetKey (MoveForward)&& Input.GetKey(RunForward)) 
-			thisChara.Move (gameObject.transform.forward * walkSpeed * Time.deltaTime * 1.5f);
-		else if (Input.GetKey (MoveForward))
-			thisChara.Move (gameObject.transform.forward * walkSpeed * Time.deltaTime);
-		if(Input.GetKey(MoveBack))
-			thisChara.Move (-gameObject.transform.forward * walkSpeed * Time.deltaTime);
-		if(Input.GetKey(MoveLeft))
-			thisChara.Move (-gameObject.transform.right * walkSpeed * Time.deltaTime);
-		if(Input.GetKey(MoveRight))
-			thisChara.Move (gameObject.transform.right * walkSpeed * Time.deltaTime);
-		if (Input.GetKey (JumpUp) && isGround) {
-			upSpeed = JumpSpeed;
-			isGround = false;
+			if (Input.GetKey (MoveForward))
+				move.z += 1;
+			if (Input.GetKey (MoveBack))
+				move.z -= 1;
+			if (Input.GetKey (MoveLeft))
+				move.x -= 1;
+			if (Input.GetKey (MoveRight))
+				move.x += 1;
+			if (Input.GetKey (JumpUp)) {
+				upSpeed = JumpSpeed;
+				isGround = false;
+			}
+			move = gameObject.transform.rotation * move.normalized;
 		}
 
 		if (upSpeed > 0)
@@ -58,6 +61,7 @@ public class PlayerMoveCtrl : MonoBehaviour {
 		else
 			upSpeed = 0;
 
+		thisChara.Move (move * walkSpeed * Time.deltaTime);
 		thisChara.Move (gameObject.transform.up * (Physics.gravity.y + upSpeed) * Time.deltaTime);
 	}
 }
