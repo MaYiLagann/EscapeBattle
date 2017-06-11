@@ -28,10 +28,12 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		if (MainWeapon == null)
 			return;
 
-		Target.transform.position = RayGetPosition (PLC.transform);
+		if (!Input.GetKey (PLC.LookAround))
+			Target.transform.position = RayGetPosition (PLC.transform);
+		AimImage.GetComponent<RectTransform> ().anchoredPosition = Camera.main.WorldToScreenPoint (Target.transform.position) - new Vector3(564.5f, 317.5f, 0); // 안좋은 방법. 다른 방법 필요
 		Debug.DrawLine (Camera.main.transform.position, Target.transform.position, Color.cyan);
 
-		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookForward))
+		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround))
 			Shoot ();
 		Aim ();
 		if (currentDelay > 0)
