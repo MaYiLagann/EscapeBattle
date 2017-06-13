@@ -61,4 +61,8 @@ public class PlayerLookCtrl : MonoBehaviour {
 		Cursor.visible = mouseVisible;
 	}
 
+	public void AddRotation(Vector2 angle){
+		rotationX += angle.x;
+		rotationY += angle.y;
+	}
 }

@@ -12,6 +12,9 @@ public class WeaponInfo : MonoBehaviour {
 	public float BulletSpeed = 100f;
 	public float ShootDelay = 0.15f;
 	public int MaxBullet = 30;
+	public float ReloadTime = 1f;
+	public float Reaction = 1f;
+	public float ReactionDuration = 1f;
 
 	[Header("Attachments Setting")]
 	public Transform ShootPosition;
