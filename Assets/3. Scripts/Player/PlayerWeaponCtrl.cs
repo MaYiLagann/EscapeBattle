@@ -19,6 +19,7 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 	private float isAim = 0; // 1 = Aimed, 0 = NotAimed
 	private int currentBullet = 0;
 	private float currentDelay = 0;
+	private float flashAlpha = 0;
 
 	private GameObject Target;
 	private GameObject Look;
@@ -40,7 +41,6 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 
 		Target.transform.position = RayGetPosition (Look.transform);
 		AimImage.GetComponent<RectTransform> ().anchoredPosition = Camera.main.WorldToScreenPoint (Target.transform.position) - new Vector3 (Screen.width / 2, Screen.height / 2, 0);
-		Debug.DrawLine (Camera.main.transform.position, Target.transform.position, Color.cyan);
 
 		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround))
 			Shoot ();
@@ -49,6 +49,11 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		Aim ();
 		if (currentDelay > 0)
 			currentDelay -= Time.deltaTime;
+
+		Color c = Color.white;
+		c.a = flashAlpha;
+		MainWeapon.ShootPosition.GetComponent<SpriteRenderer> ().color = c;
+		flashAlpha = flashAlpha > 0 ? flashAlpha - Time.deltaTime * 5f : 0;
 	}
 
 	void LateUpdate () {
@@ -83,6 +88,10 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		if (isAim == 0) 
 			PCC.RotationEffect (MainWeapon.Reaction / 2f, MainWeapon.ReactionDuration);
 
+		// Other Effect
+		MuzzleFlash();
+		MainWeapon.GetComponent<AudioSource> ().Play();
+
 		// UI
 		WeaponBullet.text = currentBullet.ToString ();
 	}
@@ -96,6 +105,7 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		yield return new WaitForSeconds (time);
 		currentBullet = MainWeapon.MaxBullet;
 		WeaponBullet.text = currentBullet.ToString ();
+		MainWeapon.GetComponent<AudioSource> ().clip = MainWeapon.ShootSound;
 	}
 
 	void Aim () {
@@ -120,5 +130,11 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 			return hit.point;
 		}
 		return Start.rotation * Vector3.forward * 500f;
+	}
+
+	void MuzzleFlash () {
+		MainWeapon.ShootPosition.Rotate (0, 0, Random.Range(0, 360f));
+		MainWeapon.ShootPosition.localScale = Vector3.one * Random.Range (2f, 4f);
+		flashAlpha = 1f;
 	}
 }

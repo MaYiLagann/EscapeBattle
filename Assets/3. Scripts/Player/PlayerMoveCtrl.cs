@@ -17,7 +17,7 @@ public class PlayerMoveCtrl : MonoBehaviour {
 
 	private float walkSpeed = 0;
 	private float upSpeed = 0;
-	private bool isGround = true;
+	private bool isGround = false;
 	private CharacterController thisChara;
 	private Vector3 move;
 

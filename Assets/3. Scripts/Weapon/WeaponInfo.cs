@@ -16,6 +16,9 @@ public class WeaponInfo : MonoBehaviour {
 	public float Reaction = 1f;
 	public float ReactionDuration = 1f;
 
+	[Header("Audio Setting")]
+	public AudioClip ShootSound;
+
 	[Header("Attachments Setting")]
 	public Transform ShootPosition;
 	public Transform Muzzle;
