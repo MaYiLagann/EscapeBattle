@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerMoveCtrl : MonoBehaviour {
+[RequireComponent(typeof(CharacterController))]
+public class PlayerMoveCtrl_Chara : MonoBehaviour {
 
 	public float MoveSpeed = 5f;
 	public float JumpSpeed = 10f;
@@ -20,9 +21,12 @@ public class PlayerMoveCtrl : MonoBehaviour {
 	private bool isGround = false;
 	private CharacterController thisChara;
 	private Vector3 move;
+	private float stepHeight = 0;
+	private bool stepHack = false;
 
 	void Start () {
 		thisChara = gameObject.GetComponent<CharacterController> ();
+		stepHeight = thisChara.stepOffset;
 	}
 
 	void Update () {
@@ -60,8 +64,11 @@ public class PlayerMoveCtrl : MonoBehaviour {
 			upSpeed += Time.deltaTime * Physics.gravity.y * 2;
 		else
 			upSpeed = 0;
-
+		
 		thisChara.Move (move * walkSpeed * Time.deltaTime);
 		thisChara.Move (gameObject.transform.up * (Physics.gravity.y + upSpeed) * Time.deltaTime);
+
+		thisChara.stepOffset = stepHeight + (stepHack ? 0 : 0.1f);
+		stepHack = !stepHack;
 	}
 }

@@ -20,6 +20,7 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 	private int currentBullet = 0;
 	private float currentDelay = 0;
 	private float flashAlpha = 0;
+	private bool weaponIdle = false;
 
 	private GameObject Target;
 	private GameObject Look;
@@ -39,12 +40,14 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		if (MainWeapon == null)
 			return;
 
+		weaponIdle = MainWeapon.GetComponent<Animator> ().GetCurrentAnimatorStateInfo (0).IsName ("WeaponIdleAnim");
+
 		Target.transform.position = RayGetPosition (Look.transform);
 		AimImage.GetComponent<RectTransform> ().anchoredPosition = Camera.main.WorldToScreenPoint (Target.transform.position) - new Vector3 (Screen.width / 2, Screen.height / 2, 0);
 
 		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround))
 			Shoot ();
-		if (currentBullet != MainWeapon.MaxBullet && Input.GetKeyDown(ReloadKey))
+		if (currentBullet != MainWeapon.MaxBullet && Input.GetKeyDown(ReloadKey) && weaponIdle)
 			Reload ();
 		Aim ();
 		if (currentDelay > 0)
@@ -64,7 +67,7 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 
 	void Shoot () {
 		PlayerCamCtrl PCC = gameObject.GetComponentInChildren<PlayerCamCtrl> ();
-		if (currentBullet <= 0 || currentDelay > 0 || !MainWeapon.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("WeaponIdleAnim"))
+		if (currentBullet <= 0 || currentDelay > 0 || !weaponIdle)
 			return;
 
 		// Create Bullet
@@ -125,11 +128,9 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 
 	Vector3 RayGetPosition (Transform Start){
 		RaycastHit hit;
-		if (Physics.Raycast (Start.position, Start.forward, out hit)) {
-			if(Vector3.Distance(Start.position, hit.point) > 1f)
+		if (Physics.Raycast (Start.position, Start.forward, out hit)) 
 			return hit.point;
-		}
-		return Start.rotation * Vector3.forward * 500f;
+		return Start.position + Start.forward * 500f;
 	}
 
 	void MuzzleFlash () {
