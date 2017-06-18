@@ -4,7 +4,9 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMoveCtrl_Rig : MonoBehaviour {
 
-	public float MaxSpeed = 5f;
+	[Range(1, 1000)]
+	public int TestFrame = 60;
+
 	public float MoveSpeed = 5f;
 	public float JumpSpeed = 10f;
 	public float CrounchSpeed = 5f;
@@ -28,13 +30,14 @@ public class PlayerMoveCtrl_Rig : MonoBehaviour {
 	private bool isGround = false;
 	private Rigidbody thisRig;
 	private Vector3 move = Vector3.zero;
-	private Vector3 airmove = Vector3.zero;
 
 	void Start () {
 		thisRig = gameObject.GetComponent<Rigidbody> ();
 	}
 
 	void Update () {
+		TestFrame += (int)Input.mouseScrollDelta.y * 10;
+		Application.targetFrameRate = TestFrame;
 		Crounch ();
 	}
 
@@ -46,6 +49,10 @@ public class PlayerMoveCtrl_Rig : MonoBehaviour {
 		isGround = true;
 	}
 
+	void OnTriggerExit (Collider col){
+		isGround = false;
+	}
+
 	/* Events */
 
 	void Move () {
@@ -54,41 +61,33 @@ public class PlayerMoveCtrl_Rig : MonoBehaviour {
 			walkSpeed = Input.GetKey (WalkForward) ? MoveSpeed / 3f : MoveSpeed;
 			walkSpeed = Input.GetKey (RunForward) ? walkSpeed * 1.5f : walkSpeed;
 
+			Jump ();
 			if (Input.GetKey (MoveForward))
-				move.z += 1;
+				move.z = 1;
 			if (Input.GetKey (MoveBack))
-				move.z -= 1;
+				move.z = -1;
 			if (Input.GetKey (MoveLeft))
-				move.x -= 1;
+				move.x = -1;
 			if (Input.GetKey (MoveRight))
-				move.x += 1;
-			if (Input.GetKey (JumpUp)) {
-				thisRig.AddForce (Vector3.up * JumpSpeed, ForceMode.Impulse);
-				isGround = false;
-			}
-			move = gameObject.transform.rotation * move.normalized;
-			airmove = Vector3.zero;
+				move.x = 1;
+			move = move.normalized;
 		} else {
 			if (Input.GetKey (MoveForward))
-				airmove.z += 1;
+				move.z = move.z < 1 ? move.z + 2 * Time.deltaTime : 1;
 			if (Input.GetKey (MoveBack))
-				airmove.z -= 1;
+				move.z = move.z > -1 ? move.z - 2 * Time.deltaTime : -1;
 			if (Input.GetKey (MoveLeft))
-				airmove.x -= 1;
+				move.x = move.x > -1 ? move.x - 2 * Time.deltaTime : -1;
 			if (Input.GetKey (MoveRight))
-				airmove.x += 1;
-			airmove = gameObject.transform.rotation * airmove.normalized;
-			thisRig.AddForce (airmove * 2f, ForceMode.Acceleration);
+				move.x = move.x < 1 ? move.x + 2 * Time.deltaTime : 1;
 		}
+		thisRig.MovePosition (gameObject.transform.position + gameObject.transform.rotation * move * walkSpeed / 100f);
 
-		thisRig.MovePosition (gameObject.transform.position + move * walkSpeed * Time.deltaTime);
-
-		// Max Speed
-		Vector3 velo = thisRig.velocity;
-		float gravity = Mathf.Clamp (velo.y, -100f, MaxSpeed);
-		velo = Vector3.ClampMagnitude (velo, MaxSpeed);
-		velo.y = gravity;
-		thisRig.velocity = velo;
+		// Set Max Velocity
+		Vector3 velocity = thisRig.velocity;
+		float gravity = Mathf.Clamp (thisRig.velocity.y, -1000f, 5f);
+		velocity.y = gravity;
+		thisRig.velocity = velocity;
 	}
 
 	void Crounch () {
@@ -98,6 +97,13 @@ public class PlayerMoveCtrl_Rig : MonoBehaviour {
 			isCrounch = isCrounch > 0 ? isCrounch -= Time.deltaTime * CrounchSpeed : 0;
 		}
 		Hip.localPosition = CrounchPosition * isCrounch + StandPosition * (1 - isCrounch);
+	}
+
+	void Jump () {
+		if (isGround && Input.GetKey (JumpUp)) {
+			thisRig.AddForce (Vector3.up * JumpSpeed, ForceMode.Impulse);
+			isGround = false;
+		}
 	}
 
 	public bool getGrounch () {

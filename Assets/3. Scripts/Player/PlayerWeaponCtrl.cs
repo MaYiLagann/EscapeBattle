@@ -42,9 +42,6 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 
 		weaponIdle = MainWeapon.GetComponent<Animator> ().GetCurrentAnimatorStateInfo (0).IsName ("WeaponIdleAnim");
 
-		Target.transform.position = RayGetPosition (Look.transform);
-		AimImage.GetComponent<RectTransform> ().anchoredPosition = Camera.main.WorldToScreenPoint (Target.transform.position) - new Vector3 (Screen.width / 2, Screen.height / 2, 0);
-
 		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround))
 			Shoot ();
 		if (currentBullet != MainWeapon.MaxBullet && Input.GetKeyDown(ReloadKey) && weaponIdle)
@@ -60,6 +57,9 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 	}
 
 	void LateUpdate () {
+		Target.transform.position = RayGetPosition (MainWeapon.ShootPosition.transform);
+		AimImage.GetComponent<RectTransform> ().anchoredPosition = Camera.main.WorldToScreenPoint (Target.transform.position) - new Vector3 (Screen.width / 2, Screen.height / 2, 0);
+
 		Look.transform.position = PLC.transform.position;
 		if (!Input.GetKey (PLC.LookAround))
 			Look.transform.rotation = PLC.transform.rotation;
