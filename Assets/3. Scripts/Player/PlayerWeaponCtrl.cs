@@ -25,6 +25,8 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 	private GameObject Target;
 	private GameObject Look;
 	private PlayerLookCtrl PLC;
+	private PlayerMoveCtrl_Rig PMC;
+	private Animator WAnim;
 
 	// Use this for initialization
 	void Start () {
@@ -32,7 +34,9 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		Target = new GameObject ("Player Shoot Target");
 		Look = new GameObject ("Player Look");
 		Look.transform.SetParent (gameObject.transform);
-		PLC = GetComponentInChildren<PlayerLookCtrl> ();
+		PLC = gameObject.GetComponentInChildren<PlayerLookCtrl> ();
+		PMC = gameObject.GetComponent<PlayerMoveCtrl_Rig> ();
+		WAnim = MainWeapon.GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
@@ -40,9 +44,11 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		if (MainWeapon == null)
 			return;
 
-		weaponIdle = MainWeapon.GetComponent<Animator> ().GetCurrentAnimatorStateInfo (0).IsName ("WeaponIdleAnim");
+		weaponIdle = WAnim.GetCurrentAnimatorStateInfo (0).IsName ("WeaponIdleAnim");
+		WAnim.SetBool ("Run", Input.GetKey(PMC.RunForward));
+		WAnim.updateMode = weaponIdle ? AnimatorUpdateMode.AnimatePhysics : AnimatorUpdateMode.Normal;
 
-		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround))
+		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround) && !Input.GetKey(PMC.RunForward))
 			Shoot ();
 		if (currentBullet != MainWeapon.MaxBullet && Input.GetKeyDown(ReloadKey) && weaponIdle)
 			Reload ();
@@ -59,7 +65,7 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 	void LateUpdate () {
 		Target.transform.position = RayGetPosition (MainWeapon.ShootPosition.transform);
 		AimImage.GetComponent<RectTransform> ().anchoredPosition = Camera.main.WorldToScreenPoint (Target.transform.position) - new Vector3 (Screen.width / 2, Screen.height / 2, 0);
-
+		AimImage.SetActive (isAim == 0f && !Input.GetKey(PMC.RunForward));
 		Look.transform.position = PLC.transform.position;
 		if (!Input.GetKey (PLC.LookAround))
 			Look.transform.rotation = PLC.transform.rotation;
@@ -100,7 +106,7 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 	}
 
 	void Reload () {
-		MainWeapon.GetComponent<Animator> ().SetTrigger ("Reload");
+		WAnim.SetTrigger ("Reload");
 		StartCoroutine (SetMaxBullet (MainWeapon.ReloadTime));
 	}
 
@@ -116,13 +122,12 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 			return;
 
 		bool aim =  Input.GetKey (AimKey);
-		if (aim && MainWeapon.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("WeaponIdleAnim")) {
+		if (aim && WAnim.GetCurrentAnimatorStateInfo(0).IsName("WeaponIdleAnim")) {
 			isAim = isAim < 1f ? isAim + Time.deltaTime / MainWeapon.AimDuration : 1f;
 		} else {
 			isAim = isAim > 0 ? isAim - Time.deltaTime / MainWeapon.AimDuration : 0;
 		}
 
-		AimImage.SetActive (isAim == 0f);
 		MainWeapon.transform.localPosition = Vector3.Slerp(MainWeapon.NotAimPosition, MainWeapon.AimPosition, isAim);
 	}
 

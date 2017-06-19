@@ -63,13 +63,13 @@ public class PlayerMoveCtrl_Rig : MonoBehaviour {
 
 			Jump ();
 			if (Input.GetKey (MoveForward))
-				move.z = 1;
+				move.z += 1;
 			if (Input.GetKey (MoveBack))
-				move.z = -1;
+				move.z += -1;
 			if (Input.GetKey (MoveLeft))
-				move.x = -1;
+				move.x += -1;
 			if (Input.GetKey (MoveRight))
-				move.x = 1;
+				move.x += 1;
 			move = move.normalized;
 		} else {
 			if (Input.GetKey (MoveForward))
