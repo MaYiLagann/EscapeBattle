@@ -25,7 +25,8 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 	private GameObject Target;
 	private GameObject Look;
 	private PlayerLookCtrl PLC;
-	private PlayerMoveCtrl_Rig PMC;
+	private PlayerMoveCtrl PMC;
+	private PlayerInventoryCtrl PIC;
 	private Animator WAnim;
 
 	// Use this for initialization
@@ -35,7 +36,8 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		Look = new GameObject ("Player Look");
 		Look.transform.SetParent (gameObject.transform);
 		PLC = gameObject.GetComponentInChildren<PlayerLookCtrl> ();
-		PMC = gameObject.GetComponent<PlayerMoveCtrl_Rig> ();
+		PMC = gameObject.GetComponent<PlayerMoveCtrl> ();
+		PIC = gameObject.GetComponent<PlayerInventoryCtrl> ();
 		WAnim = MainWeapon.GetComponent<Animator> ();
 	}
 	
@@ -45,10 +47,10 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 			return;
 
 		weaponIdle = WAnim.GetCurrentAnimatorStateInfo (0).IsName ("WeaponIdleAnim");
-		WAnim.SetBool ("Run", Input.GetKey(PMC.RunForward));
+		WAnim.SetBool ("Run", Input.GetKey (PMC.RunForward) && PMC.getMove ());
 		WAnim.updateMode = weaponIdle ? AnimatorUpdateMode.AnimatePhysics : AnimatorUpdateMode.Normal;
 
-		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround) && !Input.GetKey(PMC.RunForward))
+		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround) && !Input.GetKey(PMC.RunForward) && !PIC.getState())
 			Shoot ();
 		if (currentBullet != MainWeapon.MaxBullet && Input.GetKeyDown(ReloadKey) && weaponIdle)
 			Reload ();

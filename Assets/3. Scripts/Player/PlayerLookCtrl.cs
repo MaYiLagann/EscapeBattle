@@ -27,7 +27,7 @@ public class PlayerLookCtrl : MonoBehaviour {
 	}
 
 	void Update () {
-		if (!mouseVisible)
+		if (!mouseVisible && !gameObject.GetComponentInParent<PlayerInventoryCtrl>().getState())
 			Rotate ();
 		if(Input.GetKeyDown(MousePointKey))
 			MousePoint ();
