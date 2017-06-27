@@ -40,6 +40,7 @@ public class PlayerMoveCtrl : MonoBehaviour {
 	void Update () {
 		TestFrame += (int)Input.mouseScrollDelta.y * 10;
 		Application.targetFrameRate = TestFrame;
+
 		Crounch ();
 	}
 

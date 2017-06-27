@@ -80,9 +80,9 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 
 		// Create Bullet
 		GameObject obj = Instantiate (Bullet);
-		Destroy (obj, 10f);
 		obj.transform.position = MainWeapon.ShootPosition.position;
 		obj.transform.LookAt (Target.transform);
+		Destroy (obj, 10f);
 		obj.GetComponent<Rigidbody> ().velocity = obj.transform.forward * MainWeapon.BulletSpeed;
 
 		// Bullet System
