@@ -24,4 +24,5 @@ public class WeaponInfo : MonoBehaviour {
 	public Transform Muzzle;
 	public Transform Sight;
 	public Transform Magazine;
+	public Animator RootAnimation;
 }

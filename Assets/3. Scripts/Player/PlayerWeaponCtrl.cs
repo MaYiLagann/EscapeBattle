@@ -38,7 +38,7 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 		PLC = gameObject.GetComponentInChildren<PlayerLookCtrl> ();
 		PMC = gameObject.GetComponent<PlayerMoveCtrl> ();
 		PIC = gameObject.GetComponent<PlayerInventoryCtrl> ();
-		WAnim = MainWeapon.GetComponent<Animator> ();
+		WAnim = MainWeapon.RootAnimation;
 	}
 	
 	// Update is called once per frame
@@ -48,7 +48,6 @@ public class PlayerWeaponCtrl : MonoBehaviour {
 
 		weaponIdle = WAnim.GetCurrentAnimatorStateInfo (0).IsName ("WeaponIdleAnim");
 		WAnim.SetBool ("Run", Input.GetKey (PMC.RunForward) && PMC.getMove ());
-		WAnim.updateMode = weaponIdle ? AnimatorUpdateMode.AnimatePhysics : AnimatorUpdateMode.Normal;
 
 		if (Input.GetKey (ShootKey) && !Input.GetKey(PLC.LookAround) && !Input.GetKey(PMC.RunForward) && !PIC.getState())
 			Shoot ();
