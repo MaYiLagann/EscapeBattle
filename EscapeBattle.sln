@@ -1,7 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{1D572E17-D9E3-782B-C177-43E4137933A5}") = "EscapeBattle", "Assembly-CSharp.csproj", "{94AB5E19-B07C-FFD9-644B-603CB474B89C}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscapeBattle", "Assembly-CSharp.csproj", "{94AB5E19-B07C-FFD9-644B-603CB474B89C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
