@@ -42,6 +42,14 @@ public class PlayerMoveCtrl : MonoBehaviour {
 		Application.targetFrameRate = TestFrame;
 
 		Crounch ();
+
+		if (Input.GetKey (KeyCode.Escape)) {
+			#if UNITY_EDITOR
+			UnityEditor.EditorApplication.isPlaying = false;
+			#else
+			Application.Quit();
+			#endif
+		}
 	}
 
 	void LateUpdate () {
@@ -64,7 +72,7 @@ public class PlayerMoveCtrl : MonoBehaviour {
 			walkSpeed = Input.GetKey (WalkForward) ? MoveSpeed / 3f : MoveSpeed;
 			walkSpeed = Input.GetKey (RunForward) ? walkSpeed * 1.5f : walkSpeed;
 
-			Jump ();
+			move.y = Jump ();
 			if (Input.GetKey (MoveForward))
 				move.z += 1;
 			if (Input.GetKey (MoveBack))
@@ -104,13 +112,15 @@ public class PlayerMoveCtrl : MonoBehaviour {
 		Hip.localPosition = CrounchPosition * isCrounch + StandPosition * (1 - isCrounch);
 	}
 
-	void Jump () {
+	float Jump () {
+		float jumpSpeed = 0.0f;
 		if (isGround && !isJumped && Input.GetKey (JumpUp)) {
-			thisRig.AddRelativeForce (Vector3.up * JumpSpeed, ForceMode.Impulse);
 			isGround = false;
 			isJumped = true;
 			StartCoroutine (JumpCooldown (JumpDelay));
-		}
+			jumpSpeed = JumpSpeed;
+		} 
+		return jumpSpeed;
 	}
 
 	IEnumerator JumpCooldown(float time){
